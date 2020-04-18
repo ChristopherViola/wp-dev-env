@@ -12,6 +12,17 @@ services:
     networks:
       - wp-network
 
+  adminer:
+    image: adminer
+    container_name: adm
+    restart: always
+    ports:
+      - ${ADMINER_PORT}:8080
+    depends_on:
+      - db
+    networks: 
+      - wp-network
+
   wp:
     depends_on:
       - db
@@ -28,10 +39,10 @@ services:
     depends_on:
       - wp
     image: nginx:$NGINX_VERS
-    container_name: webserver
+    container_name: web
     restart: unless-stopped
     ports:
-      - "80:80"
+      - ${HTTP_PORT}:80
     volumes:
       - $DATA_DIR/web:/var/www/html
       - $CONF_DIR/web:/etc/nginx/conf.d
